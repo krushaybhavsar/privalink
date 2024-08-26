@@ -1,5 +1,6 @@
 export function TypographyH1(props: React.HTMLProps<HTMLHeadingElement>) {
-  const styles = "scroll-m-20 text-4xl font-bold font-neometric lslg:text-5xl ";
+  const styles =
+    "scroll-m-20 text-4xl font-semibold font-medium font-neometric lslg:text-5xl ";
   return (
     <h1 {...props} className={styles + props.className}>
       {props.children}
@@ -8,7 +9,7 @@ export function TypographyH1(props: React.HTMLProps<HTMLHeadingElement>) {
 }
 
 export function TypographyH2(props: React.HTMLProps<HTMLHeadingElement>) {
-  const styles = "scroll-m-20 text-3xl font-semibold font-neometric ";
+  const styles = "scroll-m-20 text-3xl font-medium font-neometric ";
   return (
     <h2 {...props} className={styles + props.className}>
       {props.children}
@@ -17,7 +18,7 @@ export function TypographyH2(props: React.HTMLProps<HTMLHeadingElement>) {
 }
 
 export function TypographyH3(props: React.HTMLProps<HTMLHeadingElement>) {
-  const styles = "scroll-m-20 text-2xl font-semibold font-neometric ";
+  const styles = "scroll-m-20 text-2xl font-medium font-neometric ";
   return (
     <h3 {...props} className={styles + props.className}>
       {props.children}
@@ -26,7 +27,7 @@ export function TypographyH3(props: React.HTMLProps<HTMLHeadingElement>) {
 }
 
 export function TypographyH4(props: React.HTMLProps<HTMLHeadingElement>) {
-  const styles = "scroll-m-20 text-xl font-semibold font-neometric ";
+  const styles = "scroll-m-20 text-xl font-medium font-neometric ";
   return (
     <h4 {...props} className={styles + props.className}>
       {props.children}
@@ -35,7 +36,7 @@ export function TypographyH4(props: React.HTMLProps<HTMLHeadingElement>) {
 }
 
 export function TypographyH5(props: React.HTMLProps<HTMLHeadingElement>) {
-  const styles = "scroll-m-20 text-lg font-semibold font-neometric ";
+  const styles = "scroll-m-20 text-lg font-medium font-neometric ";
   return (
     <h5 {...props} className={styles + props.className}>
       {props.children}

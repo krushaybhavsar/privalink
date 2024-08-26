@@ -11,6 +11,26 @@ import {
 } from "@/components/ui/navigation-menu";
 
 const Navbar = () => {
+  type NavbarLink = {
+    name: string;
+    url: string;
+  };
+
+  const links: NavbarLink[] = [
+    {
+      name: "Generate",
+      url: "/generate",
+    },
+    // {
+    //   name: "Decrypt",
+    //   url: "/decrypt",
+    // },
+    // {
+    //   name: "About",
+    //   url: "/about",
+    // },
+  ];
+
   return (
     <div className="navbar w-full flex items-center flex-col">
       <div className="flex items-center justify-between px-12 py-4 w-full">
@@ -23,12 +43,14 @@ const Navbar = () => {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuLink
-                className={navigationMenuTriggerStyle()}
-                href="/generate"
-              >
-                Generate
-              </NavigationMenuLink>
+              {links.map((link) => (
+                <NavigationMenuLink
+                  className="font-normal font-neometric"
+                  href={link.url}
+                >
+                  {link.name}
+                </NavigationMenuLink>
+              ))}
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

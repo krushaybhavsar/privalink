@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import ErrorScreen from "./screens/ErrorScreen";
-import LandingScreen from "./screens/LandingScreen";
-import GenerateScreen from "./screens/GenerateScreen";
+import GenerateScreen from "./screens/GenerateScreen/GenerateScreen";
+import LandingScreen from "./screens/LandingScreen/LandingScreen";
+import PageNotFound from "./screens/PageNotFound";
 
 function App() {
   return (
@@ -11,12 +11,8 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<LandingScreen />} />
-        <Route
-          path="/generate"
-          element={<GenerateScreen />}
-          errorElement={<ErrorScreen />}
-        />
-        <Route path="*" element={<ErrorScreen />} />
+        <Route path="/generate" element={<GenerateScreen />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );
