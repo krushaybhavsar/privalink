@@ -83,6 +83,9 @@ module.exports = {
         semibold: 600,
         bold: 700,
       },
+      height: {
+        "navbar-height": "var(--navbar-height)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
