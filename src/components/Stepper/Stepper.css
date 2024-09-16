@@ -1,0 +1,9 @@
+.stepper__step {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stepper__step.active {
+  background-color: hsl(var(--accent)) !important;
+  color: var(--accent-foreground) !important;
+}

@@ -7,6 +7,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { SiteMap } from "@/types";
 
 const Navbar = () => {
   type NavbarLink = {
@@ -17,22 +18,18 @@ const Navbar = () => {
 
   const links: NavbarLink[] = [
     {
-      name: "Generate",
-      url: "/generate",
+      name: SiteMap.TransferScreen.displayName,
+      url: SiteMap.TransferScreen.slug,
     },
     {
-      name: "How it works",
-      url: "/#how-it-works",
+      name: SiteMap.LandingScreen.children.HowItWorks.displayName,
+      url: SiteMap.LandingScreen.children.HowItWorks.slug,
       type: "hash",
     },
     {
-      name: "Security",
-      url: "/security",
+      name: SiteMap.SecurityScreen.displayName,
+      url: SiteMap.SecurityScreen.slug,
     },
-    // {
-    //   name: "Pricing",
-    //   url: "/pricing",
-    // },
   ];
 
   return (
@@ -40,7 +37,7 @@ const Navbar = () => {
       <div className="flex h-full items-center justify-between px-[100px] w-full max-w-[1400px]">
         <a className="flex items-center" href="/">
           <img className="w-[24px] h-[24px]" src={logo} />
-          <TypographyH3 className="ml-[10px] text-foreground font-[600]">
+          <TypographyH3 className="ml-[10px] text-foreground font-semibold">
             privalink
           </TypographyH3>
         </a>
