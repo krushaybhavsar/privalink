@@ -6,19 +6,19 @@
   :root {
     --background: 198 28% 93%;
     --foreground: 220 29% 14%;
-    --card: 204 22% 96%;
+    --card: 204 22% 97%;
     --card-foreground: 220 29% 14%;
-    --popover: 204 22% 96%;
+    --popover: 204 22% 97%;
     --popover-foreground: 220 29% 14%;
     --primary: 220 29% 14%;
-    --primary-foreground: 204 22% 96%;
+    --primary-foreground: 204 22% 97%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 220 29% 14%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
     --accent: 10 88% 63%;
     --accent-background: 10 88% 94%;
-    --accent-foreground: 204 22% 96%;
+    --accent-foreground: 204 22% 97%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 198 18% 87%;
@@ -83,6 +83,25 @@
     transition: all 300ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
     -webkit-transition: all 300ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
   }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(26, 33, 47, 0.075);
+  border-radius: 100px;
+  transition: all 0.1s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(26, 33, 47, 0.15);
 }
 
 @font-face {

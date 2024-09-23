@@ -1,5 +1,6 @@
 import { File, X } from "lucide-react";
 import { TypographyP } from "../ui/typography";
+import "./SelectedFileCard.css";
 
 type SelectedFileCardProps = {
   file: File;
@@ -17,23 +18,37 @@ const SelectedFileCard = (props: SelectedFileCardProps) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
+  const extractFileType = (file: File) => {
+    const ftype = file.name.split(".").pop()?.toUpperCase();
+    // truncate file type with ellipsis if it's longer than 4 characters
+    return ftype?.length! > 4 ? ftype?.slice(0, 4) + "..." : ftype;
+  };
+
   return (
-    <div className="glass bg-card p-5" style={{ borderRadius: 8 }}>
-      <div className="flex items-center gap-2">
-        <File className="w-6 h-6" />
-        <TypographyP>{props.file.name}</TypographyP>
+    <div
+      className="file-card glass bg-card flex justify-between items-center px-3.5 py-3 w-full cursor-pointer gap-2"
+      style={{ borderRadius: 8 }}
+      onClick={() => {
+        const newFiles = props.selectedFiles.filter(
+          (file) => file !== props.file
+        );
+        props.setSelectedFiles(newFiles);
+      }}
+    >
+      <div className="flex items-center gap-3 justify-center">
+        <File className="text-primary w-[32px] h-[32px]" strokeWidth={0.75} />
+        <div className="flex flex-col gap-0.5 justify-center items-start">
+          <TypographyP className="text-center !mt-0 whitespace-nowrap overflow-ellipsis">
+            {props.file.name}
+          </TypographyP>
+          <TypographyP className="text-center !mt-0 whitespace-nowrap !text-[12px]">
+            {formatBytes(props.file.size)}
+          </TypographyP>
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <TypographyP>{formatBytes(props.file.size)}</TypographyP>
-        <button
-          onClick={() => {
-            const newFiles = props.selectedFiles.filter(
-              (file) => file !== props.file
-            );
-            props.setSelectedFiles(newFiles);
-          }}
-        >
-          <X className="w-4 h-4" />
+      <div className="flex items-center justify-center gap-2">
+        <button className="remove-file-button">
+          <X className="w-[18px] h-[18px]" />
         </button>
       </div>
     </div>

@@ -47,8 +47,7 @@ export function TypographyH5(props: React.HTMLProps<HTMLHeadingElement>) {
 }
 
 export function TypographyP(props: React.HTMLProps<HTMLHeadingElement>) {
-  const styles =
-    "leading-7 [&:not(:first-child)]:mt-2 font-poppins text-primary ";
+  const styles = "[&:not(:first-child)]:mt-2 font-poppins text-primary ";
   return (
     <p {...props} className={styles + props.className}>
       {props.children}

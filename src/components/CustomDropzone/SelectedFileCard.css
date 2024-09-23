@@ -1,0 +1,18 @@
+.file-card .remove-file-button {
+  transition: all 0.3s ease;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.remove-file-button>* {
+  transition: all 0.3s ease;
+  color: hsl(var(--text-primary));
+}
+
+.file-card:hover .remove-file-button {
+  background-color: hsl(var(--accent-background));
+}
+
+.file-card:hover .remove-file-button>* {
+  color: hsl(var(--accent));
+}

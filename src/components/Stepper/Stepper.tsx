@@ -9,6 +9,7 @@ type StepperProps = {
   setStepIndex: (step: number) => void;
   maxSteps: number;
   content: React.ReactNode;
+  disableNextSteps?: boolean;
 };
 
 const Stepper = (props: StepperProps) => {
@@ -21,7 +22,7 @@ const Stepper = (props: StepperProps) => {
   }, [contentRef.current, props.stepIndex]);
 
   return (
-    <div className="flex flex-row w-full px-[75px] gap-10">
+    <div className="flex flex-row w-full gap-10">
       <div className="flex flex-col justify-start gap-3 items-center">
         {steps.map((step) => (
           <div
@@ -37,7 +38,11 @@ const Stepper = (props: StepperProps) => {
           >
             <div
               key={step}
-              onClick={() => props.setStepIndex(step)}
+              onClick={() => {
+                if (!props.disableNextSteps && props.stepIndex + 1 >= step) {
+                  props.setStepIndex(step);
+                }
+              }}
               className={`stepper__step ${
                 props.stepIndex >= step ? "active" : ""
               } flex justify-center items-center w-10 h-10 rounded-full bg-border`}

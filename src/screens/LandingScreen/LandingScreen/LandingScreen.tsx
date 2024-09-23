@@ -40,12 +40,12 @@ const LandingScreen = () => {
           </HashLink>
           {/* </Button> */}
           <Button
-            className="try-free-button"
+            className="icon-button"
             onClick={() => navigate(SiteMap.TransferScreen.slug)}
           >
             Try Privalink free
             <div className="relative w-[18px] h-[18px]">
-              <ArrowRight className="try-free-arrow" size={18} />
+              <ArrowRight className="icon-button-icon" size={18} />
             </div>
           </Button>
         </div>

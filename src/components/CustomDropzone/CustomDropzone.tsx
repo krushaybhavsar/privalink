@@ -17,6 +17,7 @@ const baseStyle = {
   transition: "all 0.25s ease",
   cursor: "pointer",
   textAlign: "center",
+  width: "100%",
 };
 
 const focusedStyle = {};
@@ -31,6 +32,7 @@ const rejectStyle = {};
 
 type CustomDropzoneProps = {
   className: string;
+  containerStyle?: React.CSSProperties;
   selectedFiles: File[];
   setSelectedFiles: React.Dispatch<React.SetStateAction<File[]>>;
   innerContent?: React.ReactNode;
@@ -74,7 +76,10 @@ export const CustomDropzone = (props: CustomDropzoneProps) => {
   );
 
   return (
-    <div className="glass bg-card p-3" style={{ borderRadius: 8 }}>
+    <div
+      className="glass bg-card p-3"
+      style={{ borderRadius: 8, ...props.containerStyle }}
+    >
       <div {...getRootProps({ style })} className={props.className}>
         <input {...getInputProps()} />
         {props.innerContent || (
@@ -85,7 +90,7 @@ export const CustomDropzone = (props: CustomDropzoneProps) => {
               strokeWidth={1}
             />
             <TypographyP className="text-primary opacity-40">
-              Drag and drop your files here or click to select files
+              Drag and drop your files or click here to upload
             </TypographyP>
           </>
         )}

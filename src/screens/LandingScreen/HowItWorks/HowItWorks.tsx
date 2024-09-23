@@ -22,7 +22,7 @@ const HowItWorks = () => {
               <Cctv className="hiw__icon text-accent" />
             </div>
             <TypographyH4>Data tracking</TypographyH4>
-            <TypographyP className="mt-0 opacity-50">
+            <TypographyP className="mt-0 opacity-50 leading-7">
               Email providers like Gmail, Outlook, and Yahoo scan your emails to
               build profiles and profit from your data.
             </TypographyP>
@@ -32,7 +32,7 @@ const HowItWorks = () => {
               <OctagonX className="hiw__icon text-accent" />
             </div>
             <TypographyH4>Loss of control</TypographyH4>
-            <TypographyP className="mt-0 opacity-50">
+            <TypographyP className="mt-0 opacity-50 leading-7">
               Once you share sensitive data through an email or text, you lose
               all control over it.
             </TypographyP>
@@ -42,7 +42,7 @@ const HowItWorks = () => {
               <ShieldAlert className="hiw__icon text-accent" />
             </div>
             <TypographyH4>Susceptible to attacks</TypographyH4>
-            <TypographyP className="mt-0 opacity-50">
+            <TypographyP className="mt-0 opacity-50 leading-7">
               Emails are especially the target for phishing attacks and data
               breaches.
             </TypographyP>

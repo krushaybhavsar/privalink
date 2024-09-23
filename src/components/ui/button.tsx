@@ -17,7 +17,8 @@ const buttonVariants = cva(
           "glass transition ease duration-[3s] hover:shadow-[0_4px_30px_rgba(0,0,0,0.05)]",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost:
+          "bg-border transition ease duration-[3s] hover:bg-border/80 text-primary",
         link: "text-primary underline-offset-4 hover:underline",
         accent: "bg-accent text-accent-foreground hover:bg-accent/90",
       },
