@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./TransferScreen.css";
 import Stepper from "@/components/Stepper/Stepper";
 import { CustomDropzone } from "@/components/CustomDropzone/CustomDropzone";
 import { TypographyH1 } from "@/components/ui/typography";
 import SelectedFileCard from "@/components/CustomDropzone/SelectedFileCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Lock } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Asterisk,
+  Lock,
+  ShieldCheck,
+} from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,28 +25,48 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { Tag } from "emblor";
-import CustomTagInput from "@/components/CustomTagInput/CustomTagInput";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-const formSchema = z.object({
-  message: z.string().optional(),
-  // recipients: z.array(z.string()).min(1),
-  recipients: z
-    .array(
-      z.object({
-        id: z.string().email(),
-        text: z.string().email(),
-      })
-    )
-    .min(1),
-  expiration: z.date().optional(),
-});
+const formSchema = z
+  .object({
+    message: z.string().optional(),
+    recipient: z.string().email(),
+    expiration: z.string(),
+    destroyOnOpen: z.boolean().optional(),
+    notifyWhenOpened: z.boolean().optional(),
+    notifyEmail: z.string().email().optional(),
+  })
+  .superRefine((values, ctx) => {
+    if (values.notifyWhenOpened && !values.notifyEmail) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Email is required when notifyWhenOpened is enabled",
+        path: ["notifyEmail"],
+      });
+    }
+  });
 
 const TransferScreen = () => {
   const [step, setStep] = useState(0);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [recipients, setRecipients] = useState<Tag[]>([]);
   const lastStepIndex = 1;
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const [leftColHeight, setLeftColHeight] = useState(0);
+
+  useEffect(() => {
+    if (leftColRef.current) {
+      setLeftColHeight(leftColRef.current.clientHeight);
+    }
+  }, [leftColRef.current]);
 
   const Step1Content = () => (
     <div className="transfer__right-content w-full flex flex-col gap-5">
@@ -76,10 +102,22 @@ const TransferScreen = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       message: "",
-      recipients: [],
-      expiration: undefined,
+      recipient: "",
+      expiration: "1 week",
+      destroyOnOpen: false,
+      notifyWhenOpened: false,
+      notifyEmail: undefined,
     },
   });
+  const watchNotifyWhenOpened = form.watch("notifyWhenOpened");
+
+  useEffect(() => {
+    if (watchNotifyWhenOpened) {
+      form.register("notifyEmail");
+    } else {
+      form.unregister("notifyEmail");
+    }
+  }, [watchNotifyWhenOpened]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -88,51 +126,173 @@ const TransferScreen = () => {
     console.log("Form values", values);
   }
 
+  const requiredFormLabel = (label: string) => (
+    <FormLabel className="text-left flex items-center justify-start">
+      {label}
+      <Asterisk className="text-accent w-3 h-3 ml-0.5 mb-0.5" />
+    </FormLabel>
+  );
+
   const Step2Content = () => (
     <div className="transfer__right-content w-full flex flex-col gap-5">
       <TypographyH1>configure transfer settings</TypographyH1>
       <div className="glass p-5 transition-none" style={{ borderRadius: 8 }}>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="recipients"
-              render={({ field }) => (
-                <FormItem className="flex flex-col items-start">
-                  <FormLabel className="text-left">Recipients</FormLabel>
-                  <FormControl className="w-full">
-                    <CustomTagInput
-                      field={field}
-                      form={form}
-                      tags={recipients}
-                      setTags={setRecipients}
-                      placeholder={"Enter an email"}
-                    />
-                  </FormControl>
-                  <FormDescription className="text-left">
-                    Add recipient email addresses
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="message"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{"Message"}</FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Add an optional message to your recipients
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* <Button type="submit">Submit</Button> */}
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
+          >
+            <Alert>
+              <ShieldCheck className="h-4 w-4" />
+              <AlertTitle>We value your privacy</AlertTitle>
+              <AlertDescription>
+                Privalink will never store any data you upload to this form in
+                plain text. All personally identifiable information is encrypted
+                using military grade zero-knowledge encryption.
+              </AlertDescription>
+            </Alert>
+            <div className="flex w-full h-full gap-8">
+              <div
+                className="flex flex-col w-1/2 space-y-8 h-full"
+                ref={leftColRef}
+              >
+                <FormField
+                  control={form.control}
+                  name="recipient"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col items-start">
+                      {requiredFormLabel("Recipient Email")}
+                      <FormControl className="w-full">
+                        <Input
+                          {...field}
+                          placeholder="Email address"
+                          className="w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="expiration"
+                  render={({ field }) => (
+                    <FormItem>
+                      {requiredFormLabel("Delete After")}
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1 hour">1 hour</SelectItem>
+                            <SelectItem value="12 hours">12 hours</SelectItem>
+                            <SelectItem value="1 day">1 day</SelectItem>
+                            <SelectItem value="1 week">1 week</SelectItem>
+                            <SelectItem value="1 month">1 month</SelectItem>
+                            <SelectItem value="1 year">1 year</SelectItem>
+                            <SelectItem value="never">Never</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormDescription>
+                        Set an expiration date for your transfer
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex flex-col border p-4 rounded-md gap-5">
+                  <FormField
+                    control={form.control}
+                    name="destroyOnOpen"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>Destroy on open</FormLabel>
+                          <FormDescription>
+                            Immediately delete encrypted files from Privalink
+                            servers after being opened
+                          </FormDescription>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="notifyWhenOpened"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>Notify me when opened</FormLabel>
+                          <FormDescription>
+                            Get notified via email when your files are opened
+                          </FormDescription>
+                          {watchNotifyWhenOpened && (
+                            <div className="!mt-5 !mb-2.5">
+                              <FormField
+                                control={form.control}
+                                name="notifyEmail"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    {requiredFormLabel("Email Address")}
+                                    <FormControl>
+                                      <Input
+                                        {...field}
+                                        placeholder="Email address"
+                                        className="w-full"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              <div
+                className={`flex flex-col w-1/2 justify-start items-start h-${leftColHeight}`}
+              >
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem className="!space-y-0 flex flex-col gap-2 w-full h-full justify-center">
+                      <FormLabel className="text-left flex items-center justify-start">
+                        {"Message"}
+                      </FormLabel>
+                      <FormControl className="h-full">
+                        <Textarea
+                          {...field}
+                          className={"w-full min-h-[200px] !h-full"}
+                          placeholder="Add an optional message"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
           </form>
         </Form>
       </div>
@@ -144,7 +304,7 @@ const TransferScreen = () => {
       case 0:
         return selectedFiles.length > 0;
       case 1:
-        return true;
+        return form.formState.isValid;
       default:
         return false;
     }

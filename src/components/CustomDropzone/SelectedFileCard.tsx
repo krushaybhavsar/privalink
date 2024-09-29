@@ -26,7 +26,7 @@ const SelectedFileCard = (props: SelectedFileCardProps) => {
 
   return (
     <div
-      className="file-card glass bg-card flex justify-between items-center px-3.5 py-3 w-full cursor-pointer gap-2"
+      className="file-card glass bg-card flex justify-between items-center px-3.5 py-3 w-full cursor-pointer"
       style={{ borderRadius: 8 }}
       onClick={() => {
         const newFiles = props.selectedFiles.filter(
@@ -35,18 +35,19 @@ const SelectedFileCard = (props: SelectedFileCardProps) => {
         props.setSelectedFiles(newFiles);
       }}
     >
-      <div className="flex items-center gap-3 justify-center">
-        <File className="text-primary w-[32px] h-[32px]" strokeWidth={0.75} />
-        <div className="flex flex-col gap-0.5 justify-center items-start">
-          <TypographyP className="text-center !mt-0 whitespace-nowrap overflow-ellipsis">
+      <div className="flex items-center justify-start w-full">
+        <File
+          className="text-primary !w-[32px] !h-[32px] mr-3"
+          strokeWidth={0.75}
+        />
+        <div className="flex flex-col gap-0.5 justify-center items-start w-[calc(100%-78px)] mr-2">
+          <TypographyP className="inline-block !mt-0 whitespace-nowrap overflow-ellipsis overflow-hidden w-[calc(100%)]">
             {props.file.name}
           </TypographyP>
           <TypographyP className="text-center !mt-0 whitespace-nowrap !text-[12px]">
             {formatBytes(props.file.size)}
           </TypographyP>
         </div>
-      </div>
-      <div className="flex items-center justify-center gap-2">
         <button className="remove-file-button">
           <X className="w-[18px] h-[18px]" />
         </button>
