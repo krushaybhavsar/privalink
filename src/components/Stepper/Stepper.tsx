@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 type StepperProps = {
   stepIndex: number;
   setStepIndex: (step: number) => void;
-  maxSteps: number;
+  lastStepIndex: number;
   content: React.ReactNode;
   disableNextSteps?: boolean;
 };
@@ -15,7 +15,7 @@ type StepperProps = {
 const Stepper = (props: StepperProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
-  const steps = Array.from({ length: props.maxSteps }, (_, i) => i);
+  const steps = Array.from({ length: props.lastStepIndex + 1 }, (_, i) => i);
 
   useEffect(() => {
     setContentHeight(contentRef.current?.children[0].clientHeight || 0);
@@ -29,10 +29,15 @@ const Stepper = (props: StepperProps) => {
             key={step}
             className={`transition-all duration-[3s] ease`}
             style={
-              step === props.maxSteps - 1
+              step === props.lastStepIndex
                 ? { height: undefined }
                 : props.stepIndex === step
-                ? { height: Math.max(contentHeight, 100) }
+                ? {
+                    height:
+                      Math.max(contentHeight - 52, 100) -
+                      (props.lastStepIndex - props.stepIndex - 1) * 112 -
+                      props.stepIndex * 112,
+                  }
                 : { height: 100 }
             }
           >
@@ -61,7 +66,7 @@ const Stepper = (props: StepperProps) => {
                 </TypographyP>
               )}
             </div>
-            {step !== props.maxSteps - 1 && (
+            {step !== props.lastStepIndex && (
               <Separator
                 orientation="vertical"
                 className="h-[calc(100%-3rem)] mx-auto my-3"
