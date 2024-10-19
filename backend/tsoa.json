@@ -1,0 +1,12 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "ignore",
+  "controllerPathGlobs": ["src/api/controllers/**/*.ts"],
+  "spec": {
+    "outputDirectory": "./src/api/docs",
+    "specVersion": 3
+  },
+  "routes": {
+    "routesDir": "./src/api/routes"
+  }
+}
